@@ -1,7 +1,10 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from './entities/user.entity';
+import { Project } from './entities/project.entity';
+import { Task } from './entities/task.entity';
+import { SeederService } from "./seeder.service";
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -12,12 +15,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       username: 'postgres',
       password: 'postgres',
       database: 'postgres',
-      entities: [],
+      entities: [User, Project, Task],
       synchronize: true,
       autoLoadEntities: true,
     }),
+    TypeOrmModule.forFeature([User, Project, Task]),
+    UserModule,  // Ajoute ici aussi
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  providers: [SeederService],
 })
 export class AppModule {}
