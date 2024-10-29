@@ -1,10 +1,12 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { UserModule } from './user/user.module';
 import { User } from './entities/user.entity';
 import { Project } from './entities/project.entity';
 import { Task } from './entities/task.entity';
-import { SeederService } from "./seeder.service";
-import { UserModule } from './user/user.module';
+import { SeederService } from './seeder.service';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 
 @Module({
   imports: [
@@ -19,9 +21,10 @@ import { UserModule } from './user/user.module';
       synchronize: true,
       autoLoadEntities: true,
     }),
-    TypeOrmModule.forFeature([User, Project, Task]),
-    UserModule,  // Ajoute ici aussi
+    TypeOrmModule.forFeature([User, Project, Task]), // Fournir les repositories
+    UserModule,
   ],
-  providers: [SeederService],
+  controllers: [AppController], // Ajouter AppController ici
+  providers: [AppService, SeederService], // Ajouter AppService ici
 })
 export class AppModule {}
